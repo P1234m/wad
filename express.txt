@@ -1,0 +1,40 @@
+mkdir assignment2c-crud
+cd assignment2c-crud
+npm init -y
+npm install express mongoose body-parser cors
+echo > server.js
+mkdir models
+echo > models/student.js
+mongod --dbpath C:\data\db
+node server.js
+# CREATE
+curl -X POST http://localhost:3000/students -H "Content-Type: application/json" -d "{\"name\":\"Purva\",\"age\":22,\"course\":\"CS\"}"
+
+# READ
+curl http://localhost:3000/students
+
+# UPDATE
+curl -X PUT http://localhost:3000/students/<id> -H "Content-Type: application/json" -d "{\"course\":\"IT\"}"
+
+# DELETE
+curl -X DELETE http://localhost:3000/students/<id>
+
+or for powershell
+# CREATE
+Invoke-RestMethod -Uri "http://localhost:3000/students" `
+  -Method POST `
+  -Body '{"name":"Purva","age":22,"course":"CS"}' `
+  -ContentType "application/json"
+
+# READ
+Invoke-RestMethod -Uri "http://localhost:3000/students" -Method GET
+
+# UPDATE
+Invoke-RestMethod -Uri "http://localhost:3000/students/<id>" `
+  -Method PUT `
+  -Body '{"course":"IT"}' `
+  -ContentType "application/json"
+
+# DELETE
+Invoke-RestMethod -Uri "http://localhost:3000/students/<id>" -Method DELETE
+

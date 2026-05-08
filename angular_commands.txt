@@ -1,0 +1,7 @@
+ng new my-app
+cd my-app
+ng generate component components/profile
+ng generate component components/login
+ng generate component components/register
+ng generate service services/auth
+ng serve --open

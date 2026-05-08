@@ -1,0 +1,29 @@
+sudo apt-get update
+sudo apt-get install -y docker.io
+sudo systemctl enable docker
+sudo systemctl start docker
+nvidia-smi
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+sudo apt-get update
+sudo apt-get install -y nvidia-docker2
+sudo systemctl restart docker
+docker run --rm --gpus all nvidia/cuda:11.4.0-base-ubuntu20.04 nvidia-smi
+# Create Dockerfile
+echo "FROM nvidia/cuda:11.4.0-base-ubuntu20.04
+RUN apt-get update && apt-get install -y nodejs npm
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD [\"node\", \"app.js\"]" > Dockerfile
+
+# Build image
+docker build -t gpu-node-app .
+
+# Run container with GPU
+docker run -d --gpus all -p 8080:3000 gpu-node-app
+docker ps
+docker logs <container_id>
